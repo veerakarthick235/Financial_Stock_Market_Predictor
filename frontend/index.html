@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Stock Market Predictor | Next-Gen Trading Intelligence</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="grid-overlay"></div>
+        <div class="particles"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>AI Market Predictor</span>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-section="predict">
+                    <i class="fas fa-chart-line"></i> Predict
+                </button>
+                <button class="nav-btn" data-section="analyze">
+                    <i class="fas fa-microscope"></i> Analyze
+                </button>
+                <button class="nav-btn" data-section="train">
+                    <i class="fas fa-robot"></i> Train AI
+                </button>
+                <button class="nav-btn" data-section="portfolio">
+                    <i class="fas fa-briefcase"></i> Portfolio
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Prediction Section -->
+            <section id="predict" class="section active">
+                <div class="section-header">
+                    <h1 class="title">
+                        <span class="gradient-text">AI-Powered</span> Stock Prediction
+                    </h1>
+                    <p class="subtitle">Advanced LSTM Neural Network for Market Forecasting</p>
+                </div>
+
+                <div class="prediction-container">
+                    <!-- Input Card -->
+                    <div class="card input-card">
+                        <div class="card-header">
+                            <i class="fas fa-search"></i>
+                            <h3>Enter Stock Symbol</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <input type="text" id="symbolInput" placeholder="e.g., AAPL, TSLA, BTC-USD" autocomplete="off">
+                                <button id="predictBtn" class="btn btn-primary">
+                                    <i class="fas fa-magic"></i>
+                                    <span>Predict</span>
+                                </button>
+                            </div>
+                            
+                            <div class="quick-select">
+                                <span>Quick Select:</span>
+                                <button class="chip" data-symbol="AAPL">AAPL</button>
+                                <button class="chip" data-symbol="GOOGL">GOOGL</button>
+                                <button class="chip" data-symbol="MSFT">MSFT</button>
+                                <button class="chip" data-symbol="TSLA">TSLA</button>
+                                <button class="chip" data-symbol="AMZN">AMZN</button>
+                                <button class="chip" data-symbol="BTC-USD">BTC-USD</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Grid -->
+                    <div id="resultsContainer" class="results-grid" style="display: none;">
+                        <!-- Stock Info Card -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <i class="fas fa-info-circle"></i>
+                                <h3 id="stockName">Stock Information</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <span class="info-label">Symbol</span>
+                                        <span class="info-value" id="stockSymbol">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Sector</span>
+                                        <span class="info-value" id="stockSector">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Exchange</span>
+                                        <span class="info-value" id="stockExchange">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Currency</span>
+                                        <span class="info-value" id="stockCurrency">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prediction Card -->
+                        <div class="card result-card prediction-card-main">
+                            <div class="card-header">
+                                <i class="fas fa-crystal-ball"></i>
+                                <h3>AI Prediction</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="price-display">
+                                    <div class="current-price">
+                                        <span class="label">Current Price</span>
+                                        <span class="value" id="currentPrice">$0.00</span>
+                                    </div>
+                                    <div class="arrow-container">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                    <div class="predicted-price">
+                                        <span class="label">Predicted Price</span>
+                                        <span class="value" id="predictedPrice">$0.00</span>
+                                    </div>
+                                </div>
+                                <div class="change-indicator">
+                                    <span id="priceChange" class="change-value">+0.00%</span>
+                                    <span class="change-label">Expected Change</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Confidence Score -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <i class="fas fa-gauge-high"></i>
+                                <h3>Confidence Score</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="score-container">
+                                    <div class="circular-progress" id="confidenceCircle">
+                                        <div class="progress-value">0%</div>
+                                    </div>
+                                    <p class="score-description" id="confidenceDesc">Calculating...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Market Sentiment -->
+                        <div class="card result-card">
+                            <div class="card-header">
+                                <i class="fas fa-brain"></i>
+                                <h3>Market Sentiment</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="sentiment-gauge">
+                                    <div class="gauge-bar">
+                                        <div class="gauge-fill" id="sentimentFill"></div>
+                                    </div>
+                                    <div class="gauge-labels">
+                                        <span>Bearish</span>
+                                        <span>Neutral</span>
+                                        <span>Bullish</span>
+                                    </div>
+                                    <div class="sentiment-value" id="sentimentValue">50</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Indicators -->
+                        <div class="card result-card full-width">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar"></i>
+                                <h3>Technical Indicators</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="indicators-grid">
+                                    <div class="indicator">
+                                        <span class="indicator-name">RSI (14)</span>
+                                        <span class="indicator-value" id="rsiValue">-</span>
+                                        <span class="indicator-status" id="rsiStatus">-</span>
+                                    </div>
+                                    <div class="indicator">
+                                        <span class="indicator-name">MACD</span>
+                                        <span class="indicator-value" id="macdValue">-</span>
+                                        <span class="indicator-status" id="macdStatus">-</span>
+                                    </div>
+                                    <div class="indicator">
+                                        <span class="indicator-name">SMA (20)</span>
+                                        <span class="indicator-value" id="smaValue">-</span>
+                                        <span class="indicator-status" id="smaStatus">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7-Day Forecast -->
+                        <div class="card result-card full-width">
+                            <div class="card-header">
+                                <i class="fas fa-calendar-week"></i>
+                                <h3>7-Day Forecast</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="forecastChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Historical Chart -->
+                        <div class="card result-card full-width">
+                            <div class="card-header">
+                                <i class="fas fa-chart-area"></i>
+                                <h3>Historical Performance</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="historicalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section id="analyze" class="section">
+                <div class="section-header">
+                    <h1 class="title">
+                        <span class="gradient-text">Deep</span> Market Analysis
+                    </h1>
+                    <p class="subtitle">Advanced Technical Analysis & Pattern Recognition</p>
+                </div>
+
+                <div class="analysis-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Select Stock & Period</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="analysis-controls">
+                                <input type="text" id="analyzeSymbol" placeholder="Enter symbol (e.g., AAPL)">
+                                <select id="periodSelect">
+                                    <option value="1m">1 Month</option>
+                                    <option value="3m">3 Months</option>
+                                    <option value="6m">6 Months</option>
+                                    <option value="1y" selected>1 Year</option>
+                                    <option value="all">All Time</option>
+                                </select>
+                                <button id="analyzeBtn" class="btn btn-primary">
+                                    <i class="fas fa-microscope"></i> Analyze
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="analysisResults" style="display: none;">
+                        <div class="card full-width">
+                            <div class="card-header">
+                                <i class="fas fa-chart-candlestick"></i>
+                                <h3>Price Chart with Indicators</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="analysisChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card full-width">
+                            <div class="card-header">
+                                <i class="fas fa-signal"></i>
+                                <h3>RSI Indicator</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="rsiChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Training Section -->
+            <section id="train" class="section">
+                <div class="section-header">
+                    <h1 class="title">
+                        <span class="gradient-text">Train</span> AI Model
+                    </h1>
+                    <p class="subtitle">Custom Neural Network Training for Specific Stocks</p>
+                </div>
+
+                <div class="training-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-robot"></i>
+                            <h3>Model Training</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="train-controls">
+                                <input type="text" id="trainSymbol" placeholder="Enter symbol (e.g., AAPL)">
+                                <button id="trainBtn" class="btn btn-primary">
+                                    <i class="fas fa-cogs"></i> Start Training
+                                </button>
+                            </div>
+                            
+                            <div id="trainingProgress" style="display: none;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="trainingProgressFill"></div>
+                                </div>
+                                <p class="progress-text" id="trainingStatus">Initializing...</p>
+                            </div>
+
+                            <div id="trainingResults" style="display: none;">
+                                <div class="training-metrics">
+                                    <div class="metric">
+                                        <span class="metric-label">Training Loss</span>
+                                        <span class="metric-value" id="trainLoss">-</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Validation Loss</span>
+                                        <span class="metric-value" id="valLoss">-</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Epochs</span>
+                                        <span class="metric-value" id="epochsCount">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-database"></i>
+                            <h3>Available Models</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="modelsList" class="models-list">
+                                <p class="loading-text">Loading models...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portfolio Section -->
+            <section id="portfolio" class="section">
+                <div class="section-header">
+                    <h1 class="title">
+                        <span class="gradient-text">Smart</span> Portfolio Tracker
+                    </h1>
+                    <p class="subtitle">Track and Predict Your Investment Portfolio</p>
+                </div>
+
+                <div class="portfolio-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-plus-circle"></i>
+                            <h3>Add Stock</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="portfolio-controls">
+                                <input type="text" id="portfolioSymbol" placeholder="Symbol">
+                                <input type="number" id="portfolioShares" placeholder="Shares">
+                                <input type="number" id="portfolioPrice" placeholder="Buy Price">
+                                <button id="addToPortfolioBtn" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card full-width">
+                        <div class="card-header">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>Your Portfolio</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="portfolioList" class="portfolio-list">
+                                <p class="empty-state">No stocks in portfolio. Add some to get started!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loader">
+            <div class="brain-loader">
+                <i class="fas fa-brain"></i>
+            </div>
+            <p class="loading-text">AI Processing<span class="dots"></span></p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
